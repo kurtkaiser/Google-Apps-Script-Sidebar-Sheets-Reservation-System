@@ -2,6 +2,7 @@
 // Kurt Kaiser
 // kurtkaiser.us
 // CC0 / Public Domain
+// Tutorial: youtu.be/3ms0YrGMuls
 
 // Declare global variables
 var ss = SpreadsheetApp.getActiveSpreadsheet();
