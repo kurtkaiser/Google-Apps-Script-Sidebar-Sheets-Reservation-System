@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html>
+  <head>
+  <base target="_top">
+  <style>
+  
+    body{
+      background:#d4ebf2;
+      font-size: 15px;
+    }
+    
+    #sideTitle{
+      background: white;
+      color: #005FFA; 
+      border-radius: 0.3em; 
+    }
+    
+    select {
+      width:80%;  
+      border-radius:0.3em; 
+      border-color:#00f; 
+      overflow: hidden;
+    }
+    
+    button{
+      background: #008CFA;
+      color: white; 
+      padding: 6px 16px; 
+      border-radius: 0.5em;
+    }
+    
+  </style>
+  </head>
+  <body>
+    <center>
+      <h2 id="sideTitle">
+        Question Selection
+      </h2>
+  
+      <form>
+        <h3 class="label">Start Date
+         <select id="startDate" name="startDate" class="dropQuestion" value="0" > </select>
+         </h3>
+        
+        <h3 class="label">End Date
+          <select id="endDate" name="endDate" class="dropQuestion" value="0" > </select>
+        </h3>
+        
+        <h3 class="label">Name of Client
+         <select id="clientName" name="clientName" class="dropQuestion" value="0" > </select>
+        </h3>
+        
+         <h3 class="label">Email of Client
+         <select id="clientEmail" name="clientEmail" class="dropQuestion" value="0" > </select>
+        </h3>
+
+        <h3 class="label">Calendar
+          <select id="calIndex" name="calIndex" value="0" > </select>
+        </h3>
+        
+        <h3> 
+          Reserved Email
+          <textarea id="reservedMsg" name="reservedMsg" rows="4" cols="28" placeholder="Form submitted."></textarea>
+        </h3>
+        
+        <h3>
+          Conflict Email
+          <textarea id="conflictMsg" name="conflictMsg" rows="4" cols="28" placeholder="The is a conflict."></textarea>
+        </h3>
+       
+        <button id="submitButton"  type="button" onClick="sidebarSubmit()">Submit</button>
+        <br>
+        <p style="font-size: 0.7em;"id="savedAt"></p>
+      </form>
+    </center>
+  </body>
+  
+   <script type="text/javascript">
+  
+    var questionsDrop;
+    google.script.run.withSuccessHandler(outputQuestions).getAllHeaders();
+    google.script.run.withSuccessHandler(outputCalendars).getCalendars();
+    
+    function outputQuestions(allItems){
+      var all = document.getElementsByClassName("dropQuestion");
+      for(var i = 0; i < all.length; i++){
+        all[i].innerHTML = allItems;
+      } 
+    }
+       
+    function outputCalendars(calendars){
+      document.getElementById("calIndex").innerHTML = calendars;
+      // Shows all saved info for the sidebar
+      google.script.run.withSuccessHandler(updateSidebarValues).getSavedPropsForSidebar();
+    }
+    
+    function sidebarSubmit() {
+      google.script.run.saveSidebar(document.forms[0]);
+      document.getElementById('savedAt').innerHTML = "Saved: " + (new Date()).toString().substring(0, 24);
+    }
+
+    function updateSidebarValues(properties) {
+      document.getElementById('startDate').selectedIndex = properties.startIndex || '0';
+      document.getElementById('endDate').selectedIndex = properties.endIndex || '0';
+      document.getElementById('clientName').selectedIndex = properties.clientNameIndex || '0';
+      document.getElementById('clientEmail').selectedIndex = properties.clientEmailIndex || '0';
+      document.getElementById('reservedMsg').value = properties.reservedMsg || 'Blank info.';
+      document.getElementById('conflictMsg').value = properties.conflictMsg || 'No info.';
+      document.getElementById('calIndex').selectedIndex = properties.calendarIndex || '0';
+    }
+    
+  </script>
+</html>
